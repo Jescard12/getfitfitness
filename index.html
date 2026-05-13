@@ -1,0 +1,1124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GET FIT — Fitness Center · Tripoli, Lebanon</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0a0a0a;
+    --charcoal: #111111;
+    --dark: #181818;
+    --mid: #242424;
+    --orange: #FF5C00;
+    --orange-dim: #cc4900;
+    --orange-glow: rgba(255,92,0,0.18);
+    --gold: #c9a96e;
+    --off-white: #f2ede8;
+    --muted: #888;
+    --radius: 2px;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--off-white);
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 300;
+    overflow-x: hidden;
+    cursor: none;
+  }
+
+  /* Custom Cursor */
+  .cursor {
+    width: 10px; height: 10px;
+    background: var(--orange);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9999;
+    transition: transform 0.15s ease, background 0.2s;
+    transform: translate(-50%, -50%);
+  }
+  .cursor-ring {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(255,92,0,0.5);
+    border-radius: 50%;
+    position: fixed; top: 0; left: 0;
+    pointer-events: none; z-index: 9998;
+    transition: transform 0.35s ease, width 0.3s, height 0.3s, border-color 0.3s;
+    transform: translate(-50%, -50%);
+  }
+  body:hover .cursor { opacity: 1; }
+  @media (hover: none) { .cursor, .cursor-ring { display: none; } body { cursor: auto; } }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 72px;
+    background: linear-gradient(to bottom, rgba(10,10,10,0.97), transparent);
+    backdrop-filter: blur(4px);
+    transition: background 0.4s;
+  }
+  nav.scrolled { background: rgba(10,10,10,0.97); }
+
+  .nav-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2rem;
+    letter-spacing: 0.12em;
+    color: var(--off-white);
+    text-decoration: none;
+  }
+  .nav-logo span { color: var(--orange); }
+
+  .nav-links {
+    display: flex; gap: 2.5rem; list-style: none;
+    align-items: center;
+  }
+  .nav-links a {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); text-decoration: none;
+    transition: color 0.25s;
+    font-weight: 400;
+  }
+  .nav-links a:hover { color: var(--off-white); }
+  .nav-cta {
+    background: var(--orange) !important;
+    color: var(--black) !important;
+    padding: 0.55rem 1.4rem;
+    font-weight: 500 !important;
+    font-size: 0.72rem !important;
+    letter-spacing: 0.15em !important;
+    transition: background 0.25s !important;
+  }
+  .nav-cta:hover { background: var(--orange-dim) !important; color: #fff !important; }
+
+  /* Hamburger */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 6px;
+  }
+  .hamburger span {
+    display: block; width: 26px; height: 1.5px;
+    background: var(--off-white); transition: all 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: rotate(45deg) translate(4.7px, 4.7px); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: rotate(-45deg) translate(4.7px, -4.7px); }
+
+  .mobile-menu {
+    display: none;
+    position: fixed; top: 72px; left: 0; right: 0; bottom: 0;
+    background: rgba(10,10,10,0.98);
+    z-index: 99; flex-direction: column;
+    align-items: center; justify-content: center; gap: 2.5rem;
+    backdrop-filter: blur(12px);
+  }
+  .mobile-menu.open { display: flex; }
+  .mobile-menu a {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.8rem; letter-spacing: 0.08em;
+    color: var(--off-white); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .mobile-menu a:hover { color: var(--orange); }
+
+  /* HERO */
+  .hero {
+    min-height: 100svh;
+    display: grid; place-items: center;
+    position: relative; overflow: hidden;
+    padding: 0 5vw;
+    text-align: center;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 50% at 50% 60%, rgba(255,92,0,0.12) 0%, transparent 70%),
+      linear-gradient(180deg, #0a0a0a 0%, #0f0f0f 100%);
+  }
+
+  .hero-grid-lines {
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,92,0,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,92,0,0.04) 1px, transparent 1px);
+    background-size: 80px 80px;
+    mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+  }
+
+  .hero-content { position: relative; z-index: 2; max-width: 900px; }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    border: 1px solid rgba(201,169,110,0.3);
+    padding: 0.4rem 1.1rem;
+    font-size: 0.68rem; letter-spacing: 0.3em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+  .hero-badge::before {
+    content: '★';
+    color: var(--gold); font-size: 0.55rem;
+  }
+
+  h1.hero-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(4.5rem, 14vw, 12rem);
+    line-height: 0.9;
+    letter-spacing: 0.02em;
+    color: var(--off-white);
+    animation: fadeUp 0.9s 0.1s ease both;
+  }
+  h1.hero-title em {
+    font-style: normal;
+    color: var(--orange);
+    display: block;
+  }
+
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1rem, 2.5vw, 1.35rem);
+    font-weight: 300; font-style: italic;
+    color: var(--muted); margin-top: 1.8rem;
+    letter-spacing: 0.05em;
+    animation: fadeUp 1s 0.25s ease both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1.2rem; justify-content: center;
+    margin-top: 3rem; flex-wrap: wrap;
+    animation: fadeUp 1s 0.4s ease both;
+  }
+  .btn-primary {
+    background: var(--orange); color: var(--black);
+    padding: 1rem 2.6rem; font-size: 0.72rem;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    font-weight: 500; border: none; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: background 0.25s, transform 0.2s;
+  }
+  .btn-primary:hover { background: var(--orange-dim); transform: translateY(-2px); }
+
+  .btn-ghost {
+    border: 1px solid rgba(242,237,232,0.2);
+    color: var(--off-white);
+    padding: 1rem 2.6rem; font-size: 0.72rem;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    font-weight: 400; background: transparent; cursor: pointer;
+    text-decoration: none; display: inline-block;
+    transition: border-color 0.25s, color 0.25s, transform 0.2s;
+  }
+  .btn-ghost:hover { border-color: var(--orange); color: var(--orange); transform: translateY(-2px); }
+
+  .hero-scroll {
+    position: absolute; bottom: 2.5rem; left: 50%;
+    transform: translateX(-50%);
+    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+    font-size: 0.6rem; letter-spacing: 0.25em; text-transform: uppercase; color: var(--muted);
+    animation: fadeUp 1s 0.6s ease both;
+  }
+  .scroll-line {
+    width: 1px; height: 40px;
+    background: linear-gradient(to bottom, var(--orange), transparent);
+    animation: scrollPulse 1.8s ease-in-out infinite;
+  }
+
+  /* STATS BAR */
+  .stats-bar {
+    background: var(--charcoal);
+    border-top: 1px solid rgba(255,92,0,0.15);
+    border-bottom: 1px solid rgba(255,92,0,0.15);
+    padding: 2.5rem 5vw;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+  }
+  .stat-item {
+    padding: 1rem 2rem;
+    border-right: 1px solid rgba(255,255,255,0.06);
+    text-align: center;
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    color: var(--orange);
+    line-height: 1;
+  }
+  .stat-label {
+    font-size: 0.68rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--muted); margin-top: 0.4rem;
+  }
+
+  /* SECTION BASE */
+  section { padding: 8rem 5vw; }
+  .section-tag {
+    font-size: 0.65rem; letter-spacing: 0.35em; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 1rem; font-weight: 400;
+    display: flex; align-items: center; gap: 0.8rem;
+  }
+  .section-tag::after {
+    content: ''; display: block; width: 40px; height: 1px; background: var(--orange);
+  }
+  h2.section-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(3rem, 7vw, 6rem);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    color: var(--off-white);
+  }
+  h2.section-title span { color: var(--orange); }
+
+  /* ABOUT */
+  .about-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 5rem; align-items: center;
+    margin-top: 5rem;
+  }
+  .about-img-wrap {
+    position: relative;
+  }
+  .about-img-wrap img {
+    width: 100%; height: 560px; object-fit: cover;
+    display: block;
+  }
+  .about-img-accent {
+    position: absolute; bottom: -1.5rem; right: -1.5rem;
+    width: 60%; height: 60%;
+    border: 2px solid var(--orange);
+    z-index: -1;
+  }
+  .about-text p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; line-height: 1.8; color: rgba(242,237,232,0.75);
+    margin-bottom: 1.5rem;
+  }
+  .about-features {
+    margin-top: 2.5rem;
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+  .about-feature {
+    display: flex; align-items: center; gap: 1rem;
+    font-size: 0.8rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--off-white);
+  }
+  .feature-dot {
+    width: 6px; height: 6px; background: var(--orange); border-radius: 50%; flex-shrink: 0;
+  }
+
+  /* SERVICES */
+  .services { background: var(--charcoal); }
+  .services-intro {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4rem; align-items: end; margin-bottom: 5rem;
+  }
+  .services-intro p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1rem; line-height: 1.8; color: rgba(242,237,232,0.6);
+  }
+  .services-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.05);
+  }
+  .service-card {
+    background: var(--charcoal);
+    padding: 2.5rem 2rem;
+    transition: background 0.3s;
+    cursor: default;
+    position: relative; overflow: hidden;
+  }
+  .service-card::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: var(--orange);
+    transform: scaleX(0); transform-origin: left;
+    transition: transform 0.35s ease;
+  }
+  .service-card:hover::after { transform: scaleX(1); }
+  .service-card:hover { background: var(--dark); }
+
+  .service-icon {
+    font-size: 2rem; margin-bottom: 1.5rem; display: block;
+    filter: grayscale(0.3);
+  }
+  .service-name {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 1.5rem; letter-spacing: 0.05em;
+    color: var(--off-white); margin-bottom: 0.7rem;
+  }
+  .service-desc {
+    font-size: 0.8rem; line-height: 1.7; color: var(--muted);
+  }
+
+  /* GALLERY */
+  .gallery-grid {
+    margin-top: 4rem;
+    display: grid;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: 280px 280px;
+    gap: 12px;
+  }
+  .gallery-item {
+    overflow: hidden; position: relative;
+  }
+  .gallery-item img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform 0.6s ease, filter 0.4s;
+    filter: brightness(0.85);
+  }
+  .gallery-item:hover img { transform: scale(1.06); filter: brightness(1); }
+  .gallery-item .overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(to top, rgba(10,10,10,0.6) 0%, transparent 60%);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .gallery-item:hover .overlay { opacity: 1; }
+
+  .g1 { grid-column: span 5; grid-row: span 2; }
+  .g2 { grid-column: span 7; }
+  .g3 { grid-column: span 4; }
+  .g4 { grid-column: span 3; }
+
+  /* REVIEWS */
+  .reviews { background: var(--dark); }
+  .reviews-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 4rem; flex-wrap: wrap; gap: 2rem;
+  }
+  .rating-display {
+    display: flex; align-items: flex-end; gap: 1.5rem;
+  }
+  .rating-big {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 6rem; line-height: 1; color: var(--orange);
+  }
+  .rating-info { padding-bottom: 0.8rem; }
+  .stars { font-size: 1.1rem; color: var(--gold); letter-spacing: 0.1em; }
+  .rating-count { font-size: 0.72rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); margin-top: 0.3rem; }
+
+  .reviews-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5px;
+    background: rgba(255,255,255,0.04);
+  }
+  .review-card {
+    background: var(--dark);
+    padding: 2.5rem;
+    border-bottom: 2px solid transparent;
+    transition: border-color 0.3s, background 0.3s;
+  }
+  .review-card:hover { border-color: var(--orange); background: #1e1e1e; }
+  .reviewer {
+    display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem;
+  }
+  .reviewer-avatar {
+    width: 42px; height: 42px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--orange), #ff8c00);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Bebas Neue', cursive; font-size: 1.1rem; color: var(--black);
+    flex-shrink: 0;
+  }
+  .reviewer-name { font-size: 0.85rem; font-weight: 500; color: var(--off-white); }
+  .reviewer-date { font-size: 0.68rem; color: var(--muted); margin-top: 0.2rem; letter-spacing: 0.05em; }
+  .review-stars { color: var(--gold); font-size: 0.7rem; margin-bottom: 1rem; }
+  .review-text { font-family: 'Cormorant Garamond', serif; font-size: 1rem; line-height: 1.75; color: rgba(242,237,232,0.7); }
+
+  /* CTA */
+  .cta-section {
+    background: var(--black);
+    padding: 10rem 5vw;
+    text-align: center;
+    position: relative; overflow: hidden;
+  }
+  .cta-section::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 70% 50% at 50% 50%, rgba(255,92,0,0.1) 0%, transparent 70%);
+  }
+  .cta-section .section-tag { justify-content: center; }
+  .cta-section .section-tag::after { display: none; }
+  .cta-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(3.5rem, 10vw, 9rem);
+    line-height: 0.92; color: var(--off-white);
+    position: relative; margin: 1rem 0 2.5rem;
+  }
+  .cta-title span { color: var(--orange); }
+  .cta-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.15rem; color: var(--muted);
+    font-style: italic; margin-bottom: 3.5rem;
+  }
+  .cta-actions { display: flex; gap: 1.2rem; justify-content: center; flex-wrap: wrap; }
+  .btn-large { padding: 1.2rem 3.5rem; font-size: 0.78rem; }
+
+  /* CONTACT */
+  .contact { background: var(--charcoal); }
+  .contact-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 6rem; margin-top: 4rem;
+  }
+  .contact-info { display: flex; flex-direction: column; gap: 2.5rem; }
+  .contact-item { display: flex; gap: 1.2rem; align-items: flex-start; }
+  .contact-icon {
+    width: 44px; height: 44px; flex-shrink: 0;
+    border: 1px solid rgba(255,92,0,0.3);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; color: var(--orange);
+  }
+  .contact-label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 0.4rem; }
+  .contact-value { font-size: 0.95rem; color: var(--off-white); line-height: 1.5; }
+  .contact-value a { color: var(--off-white); text-decoration: none; transition: color 0.2s; }
+  .contact-value a:hover { color: var(--orange); }
+
+  .contact-form { display: flex; flex-direction: column; gap: 1.2rem; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+  .form-field { display: flex; flex-direction: column; gap: 0.5rem; }
+  .form-field label { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .form-field input, .form-field textarea, .form-field select {
+    background: var(--dark); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--off-white); padding: 0.9rem 1.1rem;
+    font-family: 'DM Sans', sans-serif; font-size: 0.85rem;
+    outline: none; transition: border-color 0.25s;
+    resize: none;
+    -webkit-appearance: none;
+  }
+  .form-field input:focus, .form-field textarea:focus, .form-field select:focus {
+    border-color: var(--orange);
+  }
+  .form-field select option { background: var(--dark); }
+  .form-field textarea { height: 120px; }
+
+  /* FOOTER */
+  footer {
+    background: var(--black);
+    border-top: 1px solid rgba(255,92,0,0.12);
+    padding: 4rem 5vw 2rem;
+  }
+  .footer-top {
+    display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 4rem; padding-bottom: 4rem;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  .footer-logo {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 2.5rem; letter-spacing: 0.1em;
+    color: var(--off-white); margin-bottom: 1rem;
+    text-decoration: none; display: block;
+  }
+  .footer-logo span { color: var(--orange); }
+  .footer-tagline {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1rem; font-style: italic;
+    color: var(--muted); line-height: 1.6; margin-bottom: 1.5rem;
+  }
+  .footer-social { display: flex; gap: 0.8rem; }
+  .social-btn {
+    width: 38px; height: 38px;
+    border: 1px solid rgba(255,255,255,0.1);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--muted); text-decoration: none; font-size: 1rem;
+    transition: border-color 0.25s, color 0.25s;
+  }
+  .social-btn:hover { border-color: var(--orange); color: var(--orange); }
+  .footer-col h4 {
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--orange); margin-bottom: 1.5rem; font-weight: 400;
+  }
+  .footer-col ul { list-style: none; display: flex; flex-direction: column; gap: 0.8rem; }
+  .footer-col ul a {
+    font-size: 0.83rem; color: var(--muted); text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-col ul a:hover { color: var(--off-white); }
+  .footer-bottom {
+    padding-top: 2rem;
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 0.7rem; color: var(--muted); flex-wrap: wrap; gap: 1rem;
+  }
+  .footer-bottom a { color: var(--muted); text-decoration: none; }
+  .footer-bottom a:hover { color: var(--orange); }
+
+  /* HOURS TABLE */
+  .hours-table {
+    display: flex; flex-direction: column;
+    border: 1px solid rgba(255,255,255,0.07);
+    overflow: hidden;
+  }
+  .hours-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 0.65rem 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s;
+  }
+  .hours-row:last-child { border-bottom: none; }
+  .hours-row:hover { background: rgba(255,92,0,0.05); }
+  .hours-today {
+    background: rgba(255,92,0,0.1);
+    border-left: 2px solid var(--orange);
+  }
+  .hours-today .hours-day { color: var(--orange); font-weight: 500; }
+  .hours-day {
+    font-size: 0.8rem; letter-spacing: 0.05em;
+    color: var(--off-white); font-weight: 400;
+  }
+  .hours-time {
+    font-size: 0.78rem; color: rgba(242,237,232,0.6);
+    font-family: 'DM Sans', sans-serif;
+  }
+  .closed-label { color: #e05252 !important; }
+
+  /* HOURS BADGE */
+  .hours-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    font-size: 0.7rem; letter-spacing: 0.1em;
+    color: #4CAF50; margin-top: 0.5rem;
+  }
+  .hours-dot { width: 6px; height: 6px; border-radius: 50%; background: #4CAF50; animation: blink 1.5s ease-in-out infinite; }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50% { opacity: 1; transform: scaleY(1.2); }
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  .reveal {
+    opacity: 0; transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* RESPONSIVE */
+  @media (max-width: 1024px) {
+    .services-grid { grid-template-columns: repeat(2, 1fr); }
+    .footer-top { grid-template-columns: 1fr 1fr; gap: 3rem; }
+    .gallery-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .g1, .g2, .g3, .g4 { grid-column: span 1; grid-row: span 1; height: 260px; }
+    .g1 { grid-column: span 2; }
+  }
+
+  @media (max-width: 768px) {
+    .nav-links { display: none; }
+    .hamburger { display: flex; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .stat-item { border-right: 1px solid rgba(255,255,255,0.06); }
+    .stat-item:nth-child(2n) { border-right: none; }
+    .about-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .about-img-wrap img { height: 360px; }
+    .services-intro { grid-template-columns: 1fr; gap: 2rem; }
+    .services-grid { grid-template-columns: 1fr 1fr; }
+    .reviews-grid { grid-template-columns: 1fr; }
+    .reviews-header { flex-direction: column; align-items: flex-start; }
+    .contact-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .form-row { grid-template-columns: 1fr; }
+    .footer-top { grid-template-columns: 1fr; gap: 2.5rem; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    section { padding: 5rem 5vw; }
+    .gallery-grid { grid-template-columns: 1fr; }
+    .g1, .g2, .g3, .g4 { grid-column: span 1; height: 240px; }
+  }
+
+  @media (max-width: 480px) {
+    .services-grid { grid-template-columns: 1fr; }
+    .hero-actions { flex-direction: column; align-items: center; }
+    .cta-actions { flex-direction: column; align-items: center; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- Custom Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursor-ring"></div>
+
+<!-- NAV -->
+<nav id="navbar">
+  <a href="#" class="nav-logo">GET<span>FIT</span></a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#services">Services</a></li>
+    <li><a href="#gallery">Gallery</a></li>
+    <li><a href="#reviews">Reviews</a></li>
+    <li><a href="#contact">Contact</a></li>
+    <li><a href="tel:+96181579785" class="nav-cta">Join Now</a></li>
+  </ul>
+  <div class="hamburger" id="hamburger">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- Mobile Menu -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#about" onclick="closeMenu()">About</a>
+  <a href="#services" onclick="closeMenu()">Services</a>
+  <a href="#gallery" onclick="closeMenu()">Gallery</a>
+  <a href="#reviews" onclick="closeMenu()">Reviews</a>
+  <a href="#contact" onclick="closeMenu()">Contact</a>
+  <a href="tel:+96181579785" style="color: var(--orange);">Join Now</a>
+</div>
+
+<!-- HERO -->
+<section class="hero" id="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">Tripoli's Premier Fitness Destination</div>
+    <h1 class="hero-title">
+      BE THE
+      <em>TRANSFORMER</em>
+    </h1>
+    <p class="hero-sub">More than a gym — a complete lifestyle experience in the heart of Tripoli, Lebanon</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn-primary">Start Your Journey</a>
+      <a href="#services" class="btn-ghost">Explore Facilities</a>
+    </div>
+  </div>
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>Scroll</span>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stat-item reveal">
+    <div class="stat-num">4.9</div>
+    <div class="stat-label">Google Rating</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-1">
+    <div class="stat-num">112+</div>
+    <div class="stat-label">Reviews</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-2">
+    <div class="stat-num">8+</div>
+    <div class="stat-label">World-Class Facilities</div>
+  </div>
+  <div class="stat-item reveal reveal-delay-3">
+    <div class="stat-num">24/7</div>
+    <div class="stat-label">Commitment to You</div>
+  </div>
+</div>
+
+<!-- ABOUT -->
+<section id="about">
+  <div class="section-tag">Our Story</div>
+  <h2 class="section-title">Redefining <span>Fitness</span><br>In Tripoli</h2>
+  <div class="about-grid">
+    <div class="about-img-wrap reveal">
+      <img src="gym.jpg" alt="Get Fit Gym Interior">
+      <div class="about-img-accent"></div>
+    </div>
+    <div class="about-text reveal reveal-delay-2">
+      <p>Get Fit Fitness Center is not just a place to work out — it is a sanctuary for those who refuse to settle. Located on Bechara Al Khoury Street, facing Dar Al Chimal in Tripoli, we have built an environment that transforms bodies, sharpens minds, and elevates lives.</p>
+      <p>With a 4.9-star rating from over 112 members, our reputation speaks through results. Every square meter of our facility has been designed with purpose, luxury, and performance at its core.</p>
+      <div class="about-features">
+        <div class="about-feature"><div class="feature-dot"></div>State-of-the-art equipment from global brands</div>
+        <div class="about-feature"><div class="feature-dot"></div>Expert coaches & certified trainers</div>
+        <div class="about-feature"><div class="feature-dot"></div>Dedicated Ladies Section for privacy & comfort</div>
+        <div class="about-feature"><div class="feature-dot"></div>Olympic swimming pool & aqua training</div>
+        <div class="about-feature"><div class="feature-dot"></div>Premium barber & wellness lounge</div>
+      </div>
+      <div style="margin-top:2.5rem">
+        <div class="hours-badge"><div class="hours-dot"></div> Open Now — Closes 10:30 PM</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services" class="services">
+  <div class="services-intro">
+    <div>
+      <div class="section-tag">What We Offer</div>
+      <h2 class="section-title">World-Class<br><span>Facilities</span></h2>
+    </div>
+    <p>From high-intensity training to serene wellness experiences, every facility at Get Fit is crafted to deliver an unmatched standard of excellence.</p>
+  </div>
+  <div class="services-grid">
+    <div class="service-card reveal">
+      <span class="service-icon">🏋🏼</span>
+      <div class="service-name">Gym & Weights</div>
+      <p class="service-desc">Premium machines, free weights, and performance zones — designed for every level from beginner to elite athlete.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-icon">🥊</span>
+      <div class="service-name">Boxing Studio</div>
+      <p class="service-desc">Professional boxing ring, heavy bags, and speed equipment. Train like a fighter under the guidance of skilled coaches.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-icon">🏊🏼</span>
+      <div class="service-name">Swimming Pool</div>
+      <p class="service-desc">A full swimming pool for lap training, aqua fitness, and recovery. A rare luxury in Tripoli's fitness landscape.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-icon">🤸🏼</span>
+      <div class="service-name">Gymnastics</div>
+      <p class="service-desc">Purpose-built gymnastics zone with professional-grade apparatus for acrobatics, flexibility, and skill training.</p>
+    </div>
+    <div class="service-card reveal">
+      <span class="service-icon">🧘🏼‍♀️</span>
+      <div class="service-name">Pilates Studio</div>
+      <p class="service-desc">A dedicated studio for Pilates sessions — restorative, strengthening, and transformative for body and mind.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-1">
+      <span class="service-icon">🎾</span>
+      <div class="service-name">Padel Court</div>
+      <p class="service-desc">A premium Padel court for competitive play and social matches — one of Tripoli's finest sporting experiences.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-2">
+      <span class="service-icon">💈</span>
+      <div class="service-name">Barber Lounge</div>
+      <p class="service-desc">A premium grooming experience for gentlemen, with skilled barbers and a full suite of styling services.</p>
+    </div>
+    <div class="service-card reveal reveal-delay-3">
+      <span class="service-icon">🍽️</span>
+      <div class="service-name">Restaurant</div>
+      <p class="service-desc">Fuel your body right. Our in-house restaurant serves nutritious, delicious meals crafted for performance and taste.</p>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section id="gallery" style="padding-bottom: 5rem;">
+  <div class="section-tag">The Space</div>
+  <h2 class="section-title">Inside <span>Get Fit</span></h2>
+  <div class="gallery-grid">
+    <div class="gallery-item g1 reveal">
+      <img src="gym.jpg" alt="Gym Floor">
+      <div class="overlay"></div>
+    </div>
+    <div class="gallery-item g2 reveal reveal-delay-1">
+      <img src="box.jpg" alt="Boxing Studio">
+      <div class="overlay"></div>
+    </div>
+    <div class="gallery-item g3 reveal reveal-delay-2">
+      <img src="hair.jpg" alt="Barber Lounge">
+      <div class="overlay"></div>
+    </div>
+    <div class="gallery-item g4 reveal reveal-delay-3">
+      <img src="snak.jpg" alt="Restaurant">
+      <div class="overlay"></div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section id="reviews" class="reviews">
+  <div class="reviews-header">
+    <div>
+      <div class="section-tag">Testimonials</div>
+      <h2 class="section-title">What Our<br><span>Members</span> Say</h2>
+    </div>
+    <div class="rating-display">
+      <div class="rating-big">4.9</div>
+      <div class="rating-info">
+        <div class="stars">★★★★★</div>
+        <div class="rating-count">112 reviews on Google</div>
+        <a href="https://maps.app.goo.gl/CsazsZrE3SbhEvhW6" target="_blank" style="font-size:0.7rem;color:var(--orange);text-decoration:none;letter-spacing:0.1em;margin-top:0.5rem;display:block;">View All Reviews →</a>
+      </div>
+    </div>
+  </div>
+  <div class="reviews-grid">
+    <div class="review-card reveal">
+      <div class="reviewer">
+        <div class="reviewer-avatar">SA</div>
+        <div>
+          <div class="reviewer-name">Saadi A.</div>
+          <div class="reviewer-date">4 days ago</div>
+        </div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">Great gym with swimming facilities. Coach Adam is professional, motivating and very supportive. Highly recommend!</p>
+    </div>
+    <div class="review-card reveal reveal-delay-1">
+      <div class="reviewer">
+        <div class="reviewer-avatar">FF</div>
+        <div>
+          <div class="reviewer-name">Fatat Fazaa</div>
+          <div class="reviewer-date">2 weeks ago</div>
+        </div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">The place is beautiful and has all the equipment needed — very spacious. Everything is thoughtfully arranged for the best training experience.</p>
+    </div>
+    <div class="review-card reveal reveal-delay-2">
+      <div class="reviewer">
+        <div class="reviewer-avatar">JT</div>
+        <div>
+          <div class="reviewer-name">Judy Thamine</div>
+          <div class="reviewer-date">2 weeks ago</div>
+        </div>
+      </div>
+      <div class="review-stars">★★★★★</div>
+      <p class="review-text">We had an outstanding experience at Get Fit! My CityUni sports nutrition students truly benefited from the tour, gaining valuable real-world insight into professional fitness facilities.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<div class="cta-section">
+  <div class="section-tag" style="justify-content:center;">Take the First Step</div>
+  <div class="cta-title">Transform<br><span>Your Life</span></div>
+  <p class="cta-sub">Join hundreds of members who chose excellence. Your journey starts today.</p>
+  <div class="cta-actions">
+    <a href="#contact" class="btn-primary btn-large">Get in Touch</a>
+    <a href="tel:+96181579785" class="btn-ghost btn-large">📞 Call Us Now</a>
+  </div>
+</div>
+
+<!-- CONTACT -->
+<section id="contact" class="contact">
+  <div class="section-tag">Find Us</div>
+  <h2 class="section-title">Get In <span>Touch</span></h2>
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="contact-item reveal">
+        <div class="contact-icon">📍</div>
+        <div>
+          <div class="contact-label">Location</div>
+          <div class="contact-value">Bechara Al Khoury Street, Facing Dar Al Chimal<br>Dam w Farez, Tripoli, Lebanon</div>
+        </div>
+      </div>
+      <div class="contact-item reveal reveal-delay-1">
+        <div class="contact-icon">📞</div>
+        <div>
+          <div class="contact-label">Phone</div>
+          <div class="contact-value"><a href="tel:+96181579785">+961 81 579 785</a></div>
+        </div>
+      </div>
+      <div class="contact-item reveal reveal-delay-2">
+        <div class="contact-icon">🕐</div>
+        <div style="width:100%">
+          <div class="contact-label">Opening Hours</div>
+          <div class="hours-badge" style="margin-bottom:1rem;"><div class="hours-dot"></div>Currently Open</div>
+          <div class="hours-table">
+            <div class="hours-row">
+              <span class="hours-day">Monday</span>
+              <span class="hours-time">6:00 AM – 10:30 PM</span>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Tuesday</span>
+              <span class="hours-time">6:00 AM – 10:30 PM</span>
+            </div>
+            <div class="hours-row hours-today">
+              <span class="hours-day">Wednesday</span>
+              <span class="hours-time">6:00 AM – 10:30 PM</span>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Thursday</span>
+              <span class="hours-time">6:00 AM – 10:30 PM</span>
+            </div>
+            <div class="hours-row">
+              <span class="hours-day">Friday</span>
+              <span class="hours-time">6:00 AM – 10:30 PM</span>
+            </div>
+            <div class="hours-row hours-closed">
+              <span class="hours-day">Saturday</span>
+              <span class="hours-time">6:00 AM – 10:30 PM</span>
+            </div>
+            <div class="hours-row hours-closed">
+              <span class="hours-day">Sunday</span>
+              <span class="hours-time closed-label">Closed</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="contact-item reveal reveal-delay-3">
+        <div class="contact-icon">📱</div>
+        <div>
+          <div class="contact-label">Follow Us</div>
+          <div class="contact-value">
+            <a href="https://www.instagram.com/getfit_fitnesscenter/" target="_blank">@getfit_fitnesscenter</a><br>
+            <span style="color:var(--muted);font-size:0.8rem;">5,256 followers · 101 posts</span>
+          </div>
+        </div>
+      </div>
+      <!-- Map embed placeholder -->
+      <div style="margin-top:1rem;border:1px solid rgba(255,92,0,0.2);overflow:hidden;height:200px;position:relative;" class="reveal">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3291.7!2d35.8491!3d34.4367!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1521f5b16c5afe2f%3A0x0!2sGet+Fit+Fitness+Center!5e0!3m2!1sen!2slb!4v1620000000000!5m2!1sen!2slb"
+          width="100%" height="200" style="border:0;filter:grayscale(0.8) brightness(0.6) contrast(1.2);" allowfullscreen="" loading="lazy">
+        </iframe>
+      </div>
+    </div>
+
+    <div class="contact-form reveal reveal-delay-1">
+      <h3 style="font-family:'Bebas Neue',cursive;font-size:1.8rem;letter-spacing:0.05em;color:var(--off-white);margin-bottom:0.5rem;">Send Us a Message</h3>
+      <p style="font-size:0.8rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6;">Ready to start? Fill in your details and our team will reach out within 24 hours.</p>
+      <div class="form-row">
+        <div class="form-field">
+          <label>First Name</label>
+          <input type="text" placeholder="John">
+        </div>
+        <div class="form-field">
+          <label>Last Name</label>
+          <input type="text" placeholder="Doe">
+        </div>
+      </div>
+      <div class="form-field">
+        <label>Email Address</label>
+        <input type="email" placeholder="john@example.com">
+      </div>
+      <div class="form-field">
+        <label>Phone Number</label>
+        <input type="tel" placeholder="+961 xx xxx xxx">
+      </div>
+      <div class="form-field">
+        <label>Interested In</label>
+        <select>
+          <option value="">Select a service</option>
+          <option>Gym Membership</option>
+          <option>Swimming Pool</option>
+          <option>Boxing Classes</option>
+          <option>Pilates Studio</option>
+          <option>Gymnastics</option>
+          <option>Padel Court</option>
+          <option>Ladies Section</option>
+          <option>Full Membership</option>
+        </select>
+      </div>
+      <div class="form-field">
+        <label>Message (Optional)</label>
+        <textarea placeholder="Tell us about your fitness goals..."></textarea>
+      </div>
+      <button class="btn-primary" style="width:100%;padding:1.1rem;font-size:0.75rem;letter-spacing:0.2em;cursor:pointer;" onclick="handleSubmit(event)">
+        Send Message
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-top">
+    <div>
+      <a href="#" class="footer-logo">GET<span>FIT</span></a>
+      <p class="footer-tagline">"More than a gym — a complete lifestyle transformation in the heart of Tripoli."</p>
+      <div class="footer-social">
+        <a href="https://www.instagram.com/getfit_fitnesscenter/" target="_blank" class="social-btn">📸</a>
+        <a href="https://maps.app.goo.gl/CsazsZrE3SbhEvhW6" target="_blank" class="social-btn">🗺</a>
+        <a href="tel:+96181579785" class="social-btn">📞</a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h4>Facilities</h4>
+      <ul>
+        <li><a href="#services">Gym & Weights</a></li>
+        <li><a href="#services">Boxing Studio</a></li>
+        <li><a href="#services">Swimming Pool</a></li>
+        <li><a href="#services">Gymnastics</a></li>
+        <li><a href="#services">Pilates Studio</a></li>
+        <li><a href="#services">Padel Court</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Experience</h4>
+      <ul>
+        <li><a href="#services">Ladies Section</a></li>
+        <li><a href="#services">Barber Lounge</a></li>
+        <li><a href="#services">Restaurant</a></li>
+        <li><a href="#reviews">Member Reviews</a></li>
+        <li><a href="#about">Our Story</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="tel:+96181579785">+961 81 579 785</a></li>
+        <li><a href="#contact">Send a Message</a></li>
+        <li><a href="https://maps.app.goo.gl/CsazsZrE3SbhEvhW6" target="_blank">Get Directions</a></li>
+        <li><a href="https://www.instagram.com/getfit_fitnesscenter/" target="_blank">Instagram</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2025 Get Fit Fitness Center. Tripoli, Lebanon. All rights reserved.</span>
+    <span>Designed with passion for excellence</span>
+  </div>
+</footer>
+
+<script>
+  // Custom cursor
+  const cursor = document.getElementById('cursor');
+  const ring = document.getElementById('cursor-ring');
+  document.addEventListener('mousemove', e => {
+    cursor.style.left = e.clientX + 'px';
+    cursor.style.top = e.clientY + 'px';
+    ring.style.left = e.clientX + 'px';
+    ring.style.top = e.clientY + 'px';
+  });
+  document.querySelectorAll('a, button, .service-card, .gallery-item').forEach(el => {
+    el.addEventListener('mouseenter', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1.8)';
+      ring.style.width = '56px'; ring.style.height = '56px';
+      ring.style.borderColor = 'rgba(255,92,0,0.8)';
+    });
+    el.addEventListener('mouseleave', () => {
+      cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+      ring.style.width = '38px'; ring.style.height = '38px';
+      ring.style.borderColor = 'rgba(255,92,0,0.5)';
+    });
+  });
+
+  // Navbar scroll
+  window.addEventListener('scroll', () => {
+    document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Hamburger
+  const ham = document.getElementById('hamburger');
+  const mob = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('active');
+    mob.classList.toggle('open');
+  });
+  function closeMenu() {
+    ham.classList.remove('active');
+    mob.classList.remove('open');
+  }
+
+  // Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // Form submit
+  function handleSubmit(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = '✓ Message Sent!';
+    btn.style.background = '#2d6a4f';
+    setTimeout(() => { btn.textContent = 'Send Message'; btn.style.background = ''; }, 3000);
+  }
+</script>
+</body>
+</html>
